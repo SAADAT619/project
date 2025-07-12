@@ -58,10 +58,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid credentials" });
       }
       
-      req.session.merchantId = (merchant._id as any).toString();
+      req.session.merchantId = merchant._id ? merchant._id.toString() : merchant.id;
       
-      // Return merchant data without password
-      const { password: _, ...merchantData } = merchant.toObject();
+      // Return merchant data without password (handle both Mongoose documents and plain objects)
+      const merchantData = typeof merchant.toObject === 'function' ? merchant.toObject() : { ...merchant };
+      delete merchantData.password;
       res.json({ merchant: merchantData });
     } catch (error) {
       console.error("Login error:", error);
@@ -85,7 +86,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Merchant not found" });
       }
       
-      const { password: _, ...merchantData } = merchant.toObject();
+      // Return merchant data without password (handle both Mongoose documents and plain objects)
+      const merchantData = typeof merchant.toObject === 'function' ? merchant.toObject() : { ...merchant };
+      delete merchantData.password;
       res.json({ merchant: merchantData });
     } catch (error) {
       console.error("Get merchant error:", error);
