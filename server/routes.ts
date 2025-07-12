@@ -145,7 +145,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create transaction record
       await storage.createWalletTransaction({
-        merchantId: new Types.ObjectId(merchantId),
+        merchantId: merchantId,
         walletId: fromWallet._id,
         amount: amount,
         transactionType: "transfer",
@@ -175,7 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         customer = await storage.createCustomer({
           mobile: customerMobile,
           totalRewardPoints: 0,
-          registeredByMerchant: new Types.ObjectId(merchantId)
+          registeredByMerchant: merchantId
         });
       }
       
@@ -189,7 +189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           rewardNumber: rewardNumber
         }),
         storage.createPointTransaction({
-          merchantId: new Types.ObjectId(merchantId),
+          merchantId: merchantId,
           customerId: customer._id,
           points: points,
           transactionType: "distribute",
@@ -201,7 +201,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Calculate and create cashback (15% of points as cashback)
       const cashbackAmount = (points * 0.15).toFixed(2);
       await storage.createCashbackTransaction({
-        merchantId: new Types.ObjectId(merchantId),
+        merchantId: merchantId,
         amount: cashbackAmount,
         cashbackType: "instant15",
         description: "15% instant cashback on point distribution",

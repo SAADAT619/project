@@ -19,19 +19,20 @@ Preferred communication style: Simple, everyday language.
 - **Build Tool**: Vite for development and production builds
 
 ### Backend Architecture
-- **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Database Provider**: Neon Database (serverless PostgreSQL)
+- **Framework**: Express.js with TypeScript (MERN Stack)
+- **Database**: MongoDB with Mongoose ODM
+- **Database Provider**: MongoDB Atlas (cloud) with fallback in-memory storage
 - **Authentication**: Session-based authentication with express-session
 - **Password Hashing**: bcrypt for secure password storage
 
 ### Database Schema
-The application uses a comprehensive database schema with the following main entities:
+The application uses a comprehensive MongoDB schema with Mongoose models:
 - **Merchants**: Store merchant account information, profiles, and referral data
 - **Customers**: Manage customer information and reward points
 - **Wallets**: Handle multiple wallet types (reward points, income, KOMARCE balance)
 - **Transactions**: Track point transfers, cashback, and wallet transactions
 - **Products**: Support for merchant product listings (future feature)
+- **Fallback Storage**: In-memory storage system for when MongoDB is unavailable
 
 ## Key Components
 

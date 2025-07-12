@@ -17,6 +17,7 @@ import {
 import { connectDB } from "./db";
 import bcrypt from "bcrypt";
 import { Types } from "mongoose";
+import { FallbackStorage } from "./fallback-storage";
 
 export interface IStorage {
   // Merchant operations
@@ -89,7 +90,12 @@ export class MongoStorage implements IStorage {
   }
 
   private async initializeDemoData() {
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (error) {
+      console.log('Database connection failed, using fallback data');
+      return;
+    }
     
     // Check if demo merchant exists
     const existingMerchant = await Merchant.findOne({ mobile: "9876543210" });
@@ -481,4 +487,5 @@ export class MongoStorage implements IStorage {
   }
 }
 
-export const storage = new MongoStorage();
+// Use fallback storage by default, will be replaced if MongoDB is available
+export const storage = new FallbackStorage();
